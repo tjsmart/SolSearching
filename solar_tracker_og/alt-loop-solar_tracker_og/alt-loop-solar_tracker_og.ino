@@ -67,46 +67,86 @@ void loop()
 //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 //VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
-  if (valueTwo < 950 || valueThree < 950) //if light is present
-   
+// with this version the loop will have 9 possible conditions: r&t, r&b, l&t, l&b, r, l, t, b, none. Where r=right, l=left, t=top, b=bottom
+// the benefit of this is that it should use both servos simultaneously -- should (slighltly) improve speed
+//
+// it may be beficial to set up values such as:
+// int darkthres = 950; // defines how dark is dark
+// int servo_move_time = 10; // time to wait for servos to move
+// int hthres = 200; // threshold to define when to move horizontally
+// int vthres = 100; // threshold to define when to move vertically
+// int hmove = 5; // amount to move horizontal position
+// int vmove = 5; // amount to move vertical position
+// int correct_time = 100; // time to wait when the servo positions are good
+// int rest_time = 1000; // time to wait when no light is present
+
+
+if (valueTwo < 950 || valueThree < 950) //if light is present
   {
-    if (diffh >= 200)             //if light source is towards right
-    {
-      currhorizontalPos = currhorizontalPos + 5;
+      if (diffh >= 200 && diffv >= 100)             //if light source is towards right & top
+      {
+      currhorizontalPos = currhorizontalPos + 5;      // appropriately update 'pos'
       myhorizontalservo.write(currhorizontalPos);     // tell servo to go to position in variable 'pos'
-      delay(10);                 // waits 30ms for the servo to reach the position
-    }
-    else if (diffh <= -200)           //if light source is towards left
-    {
-      currhorizontalPos = currhorizontalPos - 5;
-      myhorizontalservo.write(currhorizontalPos);     // tell servo to go to position in variable 'pos'
-      delay(10);                // waits 30ms for the servo to reach the position
-
-    }
-    else          //if light source is center
-    {
-      delay(10);                // waits 30ms ---> if this condition is met then h position is good ,, how large should delay be?
-
-    }                            //end of inner if block
-
-    if (diffv >= 100)             //if light source is towards top ---> with this current setup I believe it will take turns moving servos... can we do it simultaneously?
-    {
       currverticalPos = currverticalPos + 5;
-      myverticalservo.write(currverticalPos);     // tell vertical servo to go to position in variable 'pos'
+      myverticalservo.write(currverticalPos);
       delay(10);                 // waits 30ms for the servo to reach the position
-    }
-    else if (diffv <= -100)           //if light source is towards bottom
-    {
+      }
+      else if (diffh >= 200 && diffv <= -100)             //if light source is towards right & bottom
+      {
+      currhorizontalPos = currhorizontalPos + 5;
+      myhorizontalservo.write(currhorizontalPos);
       currverticalPos = currverticalPos - 5;
-      myverticalservo.write(currverticalPos);     // tell servo to go to position in variable 'pos'
-      delay(10);                // waits 30ms for the servo to reach the position
-
-    }                            //end of inner if block
-    else          //if light source is center
-    {
-      delay(10);                // waits 30ms ---> if this condition is met then v position is good ,, how large should delay be?
-
-    }                            //end of inner if block
-  }                           //end of main if block
+      myverticalservo.write(currverticalPos);
+      delay(10);
+      }
+      else if (diffh <= -200 && diffv >= 100)             //if light source is towards left & top
+      {
+      currhorizontalPos = currhorizontalPos - 5;
+      myhorizontalservo.write(currhorizontalPos);
+      currverticalPos = currverticalPos + 5;
+      myverticalservo.write(currverticalPos);
+      delay(10);
+      }
+      else if (diffh <= -200 && diffv <= -100)             //if light source is towards left & bottom
+      {
+      currhorizontalPos = currhorizontalPos - 5;
+      myhorizontalservo.write(currhorizontalPos);
+      currverticalPos = currverticalPos - 5;
+      myverticalservo.write(currverticalPos);
+      delay(10);
+      }
+      else if (diffh >= 200 )             //if light source is towards right only
+      {
+      currhorizontalPos = currhorizontalPos + 5;
+      myhorizontalservo.write(currhorizontalPos);
+      delay(10);
+      }
+      else if (diffh <= -200 )             //if light source is towards left only
+      {
+      currhorizontalPos = currhorizontalPos - 5;
+      myhorizontalservo.write(currhorizontalPos);
+      delay(10);
+      }
+      else if (diffv >= 100 )             //if light source is towards top only
+      {
+      currverticalPos = currverticalPos + 5;
+      myverticalservo.write(currverticalPos);
+      delay(10);
+      }
+      else if (diffv <= -100 )             //if light source is towards bottom only
+      {
+      currverticalPos = currverticalPos - 5;
+      myverticalservo.write(currverticalPos);
+      delay(10);
+      }
+      else                                 // position is good now
+      {
+      delay(100);                          // rest
+      }
+  }
+  else                                     // well shit the sun is gone
+  {
+    delay(1000);                           // what do we want it do when it is dark??
+  }
 
 }                            //end of void loop() method
