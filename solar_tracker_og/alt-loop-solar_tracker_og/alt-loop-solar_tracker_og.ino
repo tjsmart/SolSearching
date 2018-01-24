@@ -70,7 +70,7 @@ void loop()
 // with this version the loop will have 9 possible conditions: r&t, r&b, l&t, l&b, r, l, t, b, none. Where r=right, l=left, t=top, b=bottom
 // the benefit of this is that it should use both servos simultaneously -- should (slighltly) improve speed
 //
-// it may be beficial to set up values such as:
+// it may be beficial to set up values such as (would be defined above though -- not in void loop()):
 // int darkthres = 950; // defines how dark is dark
 // int servo_move_time = 10; // time to wait for servos to move
 // int hthres = 200; // threshold to define when to move horizontally
