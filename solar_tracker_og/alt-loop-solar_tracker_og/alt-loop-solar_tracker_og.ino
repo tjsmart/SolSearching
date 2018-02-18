@@ -16,6 +16,18 @@ int currhorizontalPos = 100;        // variable to store the servo's horizontal 
 int currverticalPos = 100;        
 
 int ledPin = 11;
+
+
+int darkthres = 950; // defines how dark is dark
+int servo_move_time = 10; // time to wait for servos to move
+int hthres = 200; // threshold to define when to move horizontally
+int vthres = 100; // threshold to define when to move vertically
+int hmove = 5; // amount to move horizontal position
+int vmove = 5; // amount to move vertical position
+int rest_time = 100; // time to wait when the servo positions are good
+int sleep_time = 1000; // time to wait when no light is present
+
+
 void setup()
 {
   pinMode(sensorTwo, OUTPUT);  //initialize the digital pin as output
@@ -67,7 +79,7 @@ void loop()
 //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 //VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
-// with this version the loop will have 9 possible conditions: r&t, r&b, l&t, l&b, r, l, t, b, none. Where r=right, l=left, t=top, b=bottom
+// with this version the loop will have 9 possible movments: r&t, r&b, l&t, l&b, r, l, t, b, none. Where r=right, l=left, t=top, b=bottom
 // the benefit of this is that it should use both servos simultaneously -- should (slighltly) improve speed
 //
 // it may be beficial to set up values such as (would be defined above though -- not in void loop()):
@@ -77,76 +89,78 @@ void loop()
 // int vthres = 100; // threshold to define when to move vertically
 // int hmove = 5; // amount to move horizontal position
 // int vmove = 5; // amount to move vertical position
-// int correct_time = 100; // time to wait when the servo positions are good
-// int rest_time = 1000; // time to wait when no light is present
+// int rest_time = 100; // time to wait when the servo positions are good
+// int sleep_time = 1000; // time to wait when no light is present
+//
+// we may also wish to include a "quick & inaccurate" and "slow & accurate" modes --> intialize with larger hmove/vmove and develop to smaller hmove/vmove
 
 
-if (valueTwo < 950 || valueThree < 950) //if light is present
+if (valueTwo < darkthres || valueThree < darkthres) //if light is present
   {
-      if (diffh >= 200 && diffv >= 100)             //if light source is towards right & top
+      if (diffh >= 200 && diffv >= vthres)             //if light source is towards right & top
       {
-      currhorizontalPos = currhorizontalPos + 5;      // appropriately update 'pos'
+      currhorizontalPos = currhorizontalPos + hmove;      // appropriately update 'pos'
       myhorizontalservo.write(currhorizontalPos);     // tell servo to go to position in variable 'pos'
-      currverticalPos = currverticalPos + 5;
+      currverticalPos = currverticalPos + vmove;
       myverticalservo.write(currverticalPos);
-      delay(10);                 // waits 30ms for the servo to reach the position
+      delay(servo_move_time);                 // waits 30ms for the servo to reach the position
       }
-      else if (diffh >= 200 && diffv <= -100)             //if light source is towards right & bottom
+      else if (diffh >= hthres && diffv <= -vthres)             //if light source is towards right & bottom
       {
-      currhorizontalPos = currhorizontalPos + 5;
+      currhorizontalPos = currhorizontalPos + hmove;
       myhorizontalservo.write(currhorizontalPos);
-      currverticalPos = currverticalPos - 5;
+      currverticalPos = currverticalPos - vmove;
       myverticalservo.write(currverticalPos);
-      delay(10);
+      delay(servo_move_time);
       }
-      else if (diffh <= -200 && diffv >= 100)             //if light source is towards left & top
+      else if (diffh <= -hthres && diffv >= vthres)             //if light source is towards left & top
       {
-      currhorizontalPos = currhorizontalPos - 5;
+      currhorizontalPos = currhorizontalPos - hmove;
       myhorizontalservo.write(currhorizontalPos);
-      currverticalPos = currverticalPos + 5;
+      currverticalPos = currverticalPos + vmove;
       myverticalservo.write(currverticalPos);
-      delay(10);
+      delay(servo_move_time);
       }
-      else if (diffh <= -200 && diffv <= -100)             //if light source is towards left & bottom
+      else if (diffh <= -hthres && diffv <= -vthres)             //if light source is towards left & bottom
       {
-      currhorizontalPos = currhorizontalPos - 5;
+      currhorizontalPos = currhorizontalPos - hmove;
       myhorizontalservo.write(currhorizontalPos);
-      currverticalPos = currverticalPos - 5;
+      currverticalPos = currverticalPos - vmove;
       myverticalservo.write(currverticalPos);
-      delay(10);
+      delay(servo_move_time);
       }
-      else if (diffh >= 200 )             //if light source is towards right only
+      else if (diffh >= hthres )             //if light source is towards right only
       {
-      currhorizontalPos = currhorizontalPos + 5;
+      currhorizontalPos = currhorizontalPos + hmove;
       myhorizontalservo.write(currhorizontalPos);
-      delay(10);
+      delay(servo_move_time);
       }
-      else if (diffh <= -200 )             //if light source is towards left only
+      else if (diffh <= -hthres )             //if light source is towards left only
       {
-      currhorizontalPos = currhorizontalPos - 5;
+      currhorizontalPos = currhorizontalPos - hmove;
       myhorizontalservo.write(currhorizontalPos);
-      delay(10);
+      delay(servo_move_time);
       }
-      else if (diffv >= 100 )             //if light source is towards top only
+      else if (diffv >= vthres )             //if light source is towards top only
       {
-      currverticalPos = currverticalPos + 5;
+      currverticalPos = currverticalPos + vmove;
       myverticalservo.write(currverticalPos);
-      delay(10);
+      delay(servo_move_time);
       }
-      else if (diffv <= -100 )             //if light source is towards bottom only
+      else if (diffv <= -vthres )             //if light source is towards bottom only
       {
-      currverticalPos = currverticalPos - 5;
+      currverticalPos = currverticalPos - vmove;
       myverticalservo.write(currverticalPos);
-      delay(10);
+      delay(servo_move_time);
       }
       else                                 // position is good now
       {
-      delay(100);                          // rest
+      delay(rest_time);                          // rest
       }
   }
   else                                     // well shit the sun is gone
   {
-    delay(1000);                           // what do we want it do when it is dark??
+    delay(sleep_time);                           // time to sleep
   }
 
 }                            //end of void loop() method
