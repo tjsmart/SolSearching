@@ -27,7 +27,7 @@ int vmove = 5; // amount to move vertical position
 int rest_time = 100; // time to wait when the servo positions are good
 int sleep_time = 1000; // time to wait when no light is present
 
-
+//add test comment
 void setup()
 {
   pinMode(sensorTwo, OUTPUT);  //initialize the digital pin as output
