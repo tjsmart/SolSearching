@@ -39,8 +39,8 @@ int inputThree = 3;
 int inputFour = 4;        
 int inputFive = 5;        
 
-int hpos = 20;        // variable to store the servo's horizontal position
-int vpos = 85;        
+int hpos = 85;        // variable to store the servo's horizontal position
+int vpos = 92;        
 
 int ledPin = 11;
 
@@ -51,7 +51,7 @@ int vthres = 90; // threshold to define when to move vertically
 int hmove = 1; // amount to move horizontal position
 int vmove = 1; // amount to move vertical position
 int rest_time = 100; // time to wait when the servo positions are good
-int sleep_time = 100; // time to wait when no light is present
+int sleep_time = 2000; // time to wait when no light is present
 
 //add test comment
 void setup()
@@ -64,10 +64,10 @@ void setup()
   digitalWrite(sensorThree, HIGH);
   digitalWrite(sensorFour, HIGH);
   digitalWrite(sensorFive, HIGH);
-  hserv.attach(9);         // attaches the servo on pin 9 to the servo object
-  vserv.attach(10);
-  hserv.write(hpos,15,true);    // tell servo to go to position 'hpos' at speed 1
-  vserv.write(vpos,15,true);    // tell servo to go to position 'vpos' at speed 1
+  hserv.attach(10);         // attaches the servo on pin 9 to the servo object
+  vserv.attach(9);
+  hserv.write(hpos,20,true);    // tell servo to go to position 'hpos' at speed 20
+  vserv.write(vpos,20,true);    // tell servo to go to position 'vpos' at speed 20
 
   Serial.begin(9600);  //Begin serial communcation
   pinMode( ledPin, OUTPUT );
@@ -88,7 +88,7 @@ void loop()
   //send the value to the ledPin. Depending on value of resistor
   //you have  to divide the value. for example,
   //with a 10k resistor divide the value by 2, for 100k resistor divide by 4.
-  delay(25); //short delay for faster response to light.
+  delay(15); //short delay for faster response to light.
 
 
 
@@ -96,8 +96,8 @@ void loop()
   int valueThree = analogRead(inputThree); //reads the value from the ___ sensor
   int valueFour = analogRead(inputFour); //reads the value from the ___ sensor
   int valueFive = analogRead(inputFive); //reads the value from the ___ sensor
-  int diffh = valueTwo - valueThree;      //difference of two values from the sensors
-  int diffv = valueFour - valueFive;      //difference of two values from the sensors
+  int diffv = valueTwo - valueThree;      //difference of two values from the sensors
+  int diffh = valueFour - valueFive;      //difference of two values from the sensors
 
 
 //This is the actual tracking loop, we need to find a way to run this once right away, and then
@@ -119,8 +119,6 @@ if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || v
       hserv.write(hpos,10,true);     // tell servo to go to position in variable 'pos'
       vpos = vpos + vmove;
       vserv.write(vpos,10,true);
-      vserv.stop();
-      hserv.stop();
       }
       else if (diffh >= hthres && diffv <= -vthres)             //if light source is towards right & bottom
       {
@@ -128,8 +126,6 @@ if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || v
       hserv.write(hpos,10,true);
       vpos = vpos - vmove;
       vserv.write(vpos,10,true);
-      vserv.stop();
-      hserv.stop();
       }
       else if (diffh <= -hthres && diffv >= vthres)             //if light source is towards left & top
       {
@@ -137,17 +133,13 @@ if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || v
       hserv.write(hpos,10,true);
       vpos = vpos + vmove;
       vserv.write(vpos,10,true);
-      vserv.stop();
-      hserv.stop();
       }
       else if (diffh <= -hthres && diffv <= -vthres)             //if light source is towards left & bottom
       {
       hpos = hpos - hmove;
       hserv.write(hpos,10,true);
       vpos = vpos - vmove;
-      vserv.write(vpos,10,true);
-      vserv.stop();
-      hserv.stop();    
+      vserv.write(vpos,10,true);   
       }
       else if (diffh >= hthres )             //if light source is towards right only
       {
@@ -159,19 +151,16 @@ if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || v
       {
       hpos = hpos - hmove;
       hserv.write(hpos,10,true);
-      hserv.stop();  
       } 
       else if (diffv >= vthres )             //if light source is towards top only
       {
       vpos = vpos + vmove;
       vserv.write(vpos,10,true);
-      vserv.stop();
       }
       else if (diffv <= -vthres )             //if light source is towards bottom only
       {
       vpos = vpos - vmove;
       vserv.write(vpos,10,true);
-      vserv.stop();
       }
       else                                 // position is good now
       {
@@ -182,7 +171,10 @@ if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || v
   }
   else                                     // well shit the sun is gone
   {
-    delay(sleep_time);                           // night night
+    vserv.write(85,20,true);
+    hserv.write(90,20,true);
+    delay(sleep_time); 
+    // night night
   }
 
 }                            //end of void loop() method
