@@ -40,18 +40,18 @@ int inputFour = 4;
 int inputFive = 5;        
 
 int hpos = 85;        // variable to store the servo's horizontal position
-int vpos = 92;        
+int vpos = 62;        
 
 int ledPin = 11;
 
 
-int darkthres = 950; // defines how dark is dark
+int darkthres = 1000; // defines how dark is dark
 int hthres = 60; // threshold to define when to move horizontally
-int vthres = 90; // threshold to define when to move vertically
-int hmove = 1; // amount to move horizontal position
-int vmove = 1; // amount to move vertical position
-int rest_time = 100; // time to wait when the servo positions are good
-int sleep_time = 2000; // time to wait when no light is present
+int vthres = 60; // threshold to define when to move vertically
+int hmove = 5; // amount to move horizontal position
+int vmove = 5; // amount to move vertical position
+int rest_time = 10; // time to wait when the servo positions are good
+int sleep_time = 10; // time to wait when no light is present
 
 //add test comment
 void setup()
@@ -66,29 +66,30 @@ void setup()
   digitalWrite(sensorFive, HIGH);
   hserv.attach(10);         // attaches the servo on pin 9 to the servo object
   vserv.attach(9);
-  hserv.write(hpos,20,true);    // tell servo to go to position 'hpos' at speed 20
-  vserv.write(vpos,20,true);    // tell servo to go to position 'vpos' at speed 20
+  hserv.write(hpos,10,true);    // tell servo to go to position 'hpos' at speed 20
+  vserv.write(vpos,10,true);    // tell servo to go to position 'vpos' at speed 20
 
   Serial.begin(9600);  //Begin serial communcation
   pinMode( ledPin, OUTPUT );
 }
 void loop()
 {
-  //Serial.println(2);
-  Serial.println(analogRead(sensorTwo)); //Write the value of the photoresistor to the serial monitor.
-  //Serial.println(3);
-  Serial.println(analogRead(sensorThree));
-  //Serial.println(4);
-  Serial.println(analogRead(sensorFour));
-  //Serial.println(5);
-  Serial.println(analogRead(sensorFive));
+  //Serial.println("This is 2");
+  //Serial.println(analogRead(sensorTwo)); //Write the value of the photoresistor to the serial monitor.
+  //Serial.println("This is 3");
+  //Serial.println(analogRead(sensorThree));
+  //Serial.println("This is 4");
+  //Serial.println(analogRead(sensorFour));
+  //Serial.println("This is 5");
+  //Serial.println(analogRead(sensorFive));
+
 
 
   analogWrite(ledPin, analogRead(sensorTwo) / 1.5); 
   //send the value to the ledPin. Depending on value of resistor
   //you have  to divide the value. for example,
   //with a 10k resistor divide the value by 2, for 100k resistor divide by 4.
-  delay(15); //short delay for faster response to light.
+  delay(10); //short delay for faster response to light.
 
 
 
@@ -96,9 +97,26 @@ void loop()
   int valueThree = analogRead(inputThree); //reads the value from the ___ sensor
   int valueFour = analogRead(inputFour); //reads the value from the ___ sensor
   int valueFive = analogRead(inputFive); //reads the value from the ___ sensor
-  int diffv = valueTwo - valueThree;      //difference of two values from the sensors
-  int diffh = valueFour - valueFive;      //difference of two values from the sensors
+  int diffh = valueThree - valueTwo;      //difference of two values from the sensors
+  int diffv = valueFive - valueFour;      //difference of two values from the sensors
 
+  //Serial.println("This is dh");
+  //Serial.print(diffh);
+  //Serial.println("This is dv");
+  //Serial.print(diffv);
+
+  Serial.print(valueTwo); //Write the value of the photoresistor to the serial monitor.
+  Serial.print("\t");
+  Serial.print(valueThree);
+  Serial.print("\t");
+  Serial.print(diffh);
+  Serial.print("\t");
+  Serial.print(valueFour);
+  Serial.print("\t");
+  Serial.print(valueFive);
+  Serial.print("\t");
+  Serial.println(diffv);
+  
 
 //This is the actual tracking loop, we need to find a way to run this once right away, and then
 //go into a mode where it only wakes up and runs the loop every minute or two from then on.

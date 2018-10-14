@@ -36,13 +36,13 @@ void setup()
 }
 void loop()
 {
-  Serial.println(1);
-  Serial.println(analogRead(sensorTwo)); //Write the value of the photoresistor to the serial monitor.
   Serial.println(2);
-  Serial.println(analogRead(sensorThree));
+  Serial.println(analogRead(sensorTwo)); //Write the value of the photoresistor to the serial monitor.
   Serial.println(3);
-  Serial.println(analogRead(sensorFour));
+  Serial.println(analogRead(sensorThree));
   Serial.println(4);
+  Serial.println(analogRead(sensorFour));
+  Serial.println(5);
   Serial.println(analogRead(sensorFive));
 
 
@@ -61,13 +61,16 @@ void loop()
   int diffh = valueTwo - valueThree;      //difference of two values from the sensors
   int diffv = valueFour - valueFive;      //difference of two values from the sensors
 
+  Serial.println(diffh);
+  Serial.println(diffv);
+
 
 //This is the actual tracking loop, we need to find a way to run this once right away, and then
 //go into a mode where it only wakes up and runs the loop every minute or two from then on.
 //||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 //VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
-  if (valueTwo < 950 || valueThree < 950) //if light is present
+  if (valueTwo < 1000 || valueThree < 1000) //if light is present
    
   {
     if (diffh >= 200)             //if light source is towards right
@@ -104,7 +107,7 @@ void loop()
     }                            //end of inner if block
     else          //if light source is center
     {
-      delay(10);                // waits 30ms ---> if this condition is met then v position is good ,, how large should delay be?
+      delay(1000);                // waits 30ms ---> if this condition is met then v position is good ,, how large should delay be?
 
     }                            //end of inner if block
   }                           //end of main if block
