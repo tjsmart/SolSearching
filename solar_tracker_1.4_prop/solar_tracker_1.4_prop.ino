@@ -127,10 +127,10 @@ if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || v
   {
       if (diffh >= hthres || diffv >= vthres || diffh <= hthres || diffv <= diffv)             //if light source is towards right & top
       {
-      hmove = diffh/80;
+      hmove = diffh/100;
       hpos = hpos + hmove;      // appropriately update 'pos'
       hserv.write(hpos,10,true);     // tell servo to go to position in variable 'pos'
-      vmove = diffv/80;
+      vmove = diffv/100;
       vpos = vpos + vmove;
       vserv.write(vpos,10,true);
       Serial.print(hmove);
