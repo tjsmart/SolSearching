@@ -45,15 +45,11 @@ int vpos = 62;
 int ledPin = 11;
 
 
-int darkthres = 1000; // defines how dark is dark
+int darkthres = 950; // defines how dark is dark
 int hthres = 60; // threshold to define when to move horizontally
 int vthres = 60; // threshold to define when to move vertically
-int hmove = 5; // amount to move horizontal position
-int vmove = 5; // amount to move vertical position
-int rest_time = 10; // time to wait when the servo positions are good
+int rest_time = 10000; // time to wait when the servo positions are good
 int sleep_time = 10; // time to wait when no light is present
-int alpha = 1; // moveh = diffh * alpha
-int beta = 1; // movev = diffv * beta
 
 //add test comment
 void setup()
@@ -73,7 +69,6 @@ void setup()
 
   Serial.begin(9600);  //Begin serial communcation
   pinMode( ledPin, OUTPUT );
-  
 }
 void loop()
 {
@@ -102,7 +97,9 @@ void loop()
   int valueFive = analogRead(inputFive); //reads the value from the ___ sensor
   int diffh = valueThree - valueTwo;      //difference of two values from the sensors
   int diffv = valueFive - valueFour;      //difference of two values from the sensors
-
+  int hmove = 1; // amount to move horizontal position
+  int vmove = 1; // amount to move vertical position
+  
   //Serial.println("This is dh");
   //Serial.print(diffh);
   //Serial.println("This is dv");
@@ -121,89 +118,79 @@ void loop()
   Serial.println(diffv);
   
 
+//This is the actual tracking loop, we need to find a way to run this once right away, and then
+//go into a mode where it only wakes up and runs the loop every minute or two from then on.
+//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+//VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+// with this version the loop will have 9 possible movments: r&t, r&b, l&t, l&b, r, l, t, b, none. Where r=right, l=left, t=top, b=bottom
+// the benefit of this is that it should use both servos simultaneously -- should (slighltly) improve speed
+
+// we may also wish to include a "quick & inaccurate" and "slow & accurate" modes --> intialize with larger hmove/vmove and develop to smaller hmove/vmove
 
 
 if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || valueFive < darkthres) //if light is present
   {
-      if (diffh >= hthres || diffv >= vthres || diffh <= hthres || diffv <= diffv)             //if light source is towards right & top
+      if (diffh >= hthres && diffv >= vthres)             //if light source is towards right & top
       {
-      hmove = diffh/100;
       hpos = hpos + hmove;      // appropriately update 'pos'
       hserv.write(hpos,10,true);     // tell servo to go to position in variable 'pos'
-      vmove = diffv/100;
       vpos = vpos + vmove;
       vserv.write(vpos,10,true);
-      Serial.print(hmove);
-      Serial.print("\t");
-      Serial.println(vmove);
+      }
+      else if (diffh >= hthres && diffv <= -vthres)             //if light source is towards right & bottom
+      {
+      hpos = hpos + hmove;
+      hserv.write(hpos,10,true);
+      vpos = vpos - vmove;
+      vserv.write(vpos,10,true);
+      }
+      else if (diffh <= -hthres && diffv >= vthres)             //if light source is towards left & top
+      {
+      hpos = hpos - hmove;
+      hserv.write(hpos,10,true);
+      vpos = vpos + vmove;
+      vserv.write(vpos,10,true);
+      }
+      else if (diffh <= -hthres && diffv <= -vthres)             //if light source is towards left & bottom
+      {
+      hpos = hpos - hmove;
+      hserv.write(hpos,10,true);
+      vpos = vpos - vmove;
+      vserv.write(vpos,10,true);   
+      }
+      else if (diffh >= hthres )             //if light source is towards right only
+      {
+      hpos = hpos + hmove;
+      hserv.write(hpos,10,true);
+      hserv.stop(); 
+      }
+      else if (diffh <= -hthres )             //if light source is towards left only
+      {
+      hpos = hpos - hmove;
+      hserv.write(hpos,10,true);
+      } 
+      else if (diffv >= vthres )             //if light source is towards top only
+      {
+      vpos = vpos + vmove;
+      vserv.write(vpos,10,true);
+      }
+      else if (diffv <= -vthres )             //if light source is towards bottom only
+      {
+      vpos = vpos - vmove;
+      vserv.write(vpos,10,true);
+      }
+      else                                 // position is good now
+      {
+     delay(rest_time);                          // rest
       }
   }
-
-
-// if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || valueFive < darkthres) //if light is present
-//   {
-//       if (diffh >= hthres && diffv >= vthres)             //if light source is towards right & top
-//       {
-//       hpos = hpos + hmove;      // appropriately update 'pos'
-//       hserv.write(hpos,10,true);     // tell servo to go to position in variable 'pos'
-//       vpos = vpos + vmove;
-//       vserv.write(vpos,10,true);
-//       }
-//       else if (diffh >= hthres && diffv <= -vthres)             //if light source is towards right & bottom
-//       {
-//       hpos = hpos + hmove;
-//       hserv.write(hpos,10,true);
-//       vpos = vpos - vmove;
-//       vserv.write(vpos,10,true);
-//       }
-//       else if (diffh <= -hthres && diffv >= vthres)             //if light source is towards left & top
-//       {
-//       hpos = hpos - hmove;
-//       hserv.write(hpos,10,true);
-//       vpos = vpos + vmove;
-//       vserv.write(vpos,10,true);
-//       }
-//       else if (diffh <= -hthres && diffv <= -vthres)             //if light source is towards left & bottom
-//       {
-//       hpos = hpos - hmove;
-//       hserv.write(hpos,10,true);
-//       vpos = vpos - vmove;
-//       vserv.write(vpos,10,true);   
-//       }
-//       else if (diffh >= hthres )             //if light source is towards right only
-//       {
-//       hpos = hpos + hmove;
-//       hserv.write(hpos,10,true);
-//       hserv.stop(); 
-//       }
-//       else if (diffh <= -hthres )             //if light source is towards left only
-//       {
-//       hpos = hpos - hmove;
-//       hserv.write(hpos,10,true);
-//       } 
-//       else if (diffv >= vthres )             //if light source is towards top only
-//       {
-//       vpos = vpos + vmove;
-//       vserv.write(vpos,10,true);
-//       }
-//       else if (diffv <= -vthres )             //if light source is towards bottom only
-//       {
-//       vpos = vpos - vmove;
-//       vserv.write(vpos,10,true);
-//       }
-//       else                                 // position is good now
-//       {
-//         hserv.stop();
-//         vserv.stop();
-//      delay(rest_time);                          // rest
-//       }
-//   }
-//   else                                     // well shit the sun is gone
-//   {
-//     vserv.write(85,20,true);
-//     hserv.write(90,20,true);
-//     delay(sleep_time); 
-//     // night night
-//   }
+  else                                     // well shit the sun is gone
+  {
+    vserv.write(85,20,true);
+    hserv.write(90,20,true);
+    delay(sleep_time); 
+    // night night
+  }
 
 }                            //end of void loop() method
