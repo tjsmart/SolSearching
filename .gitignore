@@ -1,0 +1,10 @@
+# .gitignore
+
+# files to ignore
+.DS_Store
+
+# prefix to ignore
+~$*
+
+# directories to ignore
+local/
