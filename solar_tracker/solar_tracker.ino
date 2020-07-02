@@ -17,8 +17,8 @@ void setup()
     digitalWrite(sensorThree, HIGH);
     digitalWrite(sensorFour, HIGH);
     digitalWrite(sensorFive, HIGH);
-    hserv.attach(10);         // attaches the servo on pin 9 to the servo object
-    vserv.attach(9);
+    hserv.attach(hservoPin);         // attaches the servo on pin 9 to the servo object
+    vserv.attach(vservoPin);
     hserv.write(hpos,10,true);    // tell servo to go to position 'hpos' at speed 20
     vserv.write(vpos,10,true);    // tell servo to go to position 'vpos' at speed 20
 

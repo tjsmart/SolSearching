@@ -12,6 +12,10 @@ const int inputThree = 3;
 const int inputFour = 2;
 const int inputFive = 4;
 
+// servo pins
+const int vservoPin = 9;
+const int hservoPin = 10;
+
 // starting position of the servo
 int hpos = 85;
 int vpos = 62;
