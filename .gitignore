@@ -3,6 +3,10 @@
 # files to ignore
 .DS_Store
 
+# suffix to ignore
+*.o
+*.x
+
 # prefix to ignore
 ~$*
 
