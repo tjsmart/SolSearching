@@ -1,3 +1,4 @@
 [√] Add tests (2681483)
 [√] Working version
+[X] Version to track and record entire space
 [X] Clean up code
