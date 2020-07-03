@@ -4,7 +4,9 @@
 // instatiate two servos
 // for more info see https://github.com/netlabtoolkit/VarSpeedServo/blob/master/VarSpeedServo.cpp
 VarSpeedServo hserv;
-VarSpeedServo vserv;         
+VarSpeedServo vserv;
+int hmove;
+int vmove;
 
 
 void setup()
@@ -50,25 +52,30 @@ void loop()
 
 
     //if light is present
-    if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || valueFive < darkthres){
+    if (valueTwo < darkthres || valueThree < darkthres || valueFour < darkthres || valueFive < darkthres)
+    {
         //if light source is unoptimized
-        if (diffh >= hthres || diffv >= vthres || diffh <= hthres || diffv <= diffv){
-            hmove = diffh/100;
+        if (diffh >= thresh || diffv >= thresh || diffh <= -thresh || diffv <= -thresh)
+        {
+            hmove = diffh/alpha;
             hpos = hpos + hmove;
             hserv.write(hpos,10,true);
-            vmove = diffv/100;
+            vmove = diffv/alpha;
             vpos = vpos + vmove;
             vserv.write(vpos,10,true);
             Serial.print(hmove);
             Serial.print("\t");
             Serial.println(vmove);
         }
-        else{
+        else
+        {
             //sleep
+            Serial.println("sleeping");
             delay(rest_time);
         }
     }
-    else{
+    else
+    {
         //big sleep?
         delay(sleep_time);
     }
