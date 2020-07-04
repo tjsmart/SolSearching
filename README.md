@@ -25,6 +25,7 @@ For the photoresistors, looking down the shaft of the cross:
        bottom(4)  
 ```
 
-
 For the servos, the vertical (horizontal) servo should be attached to pin 9, 10.
+
+Worst case scenario, just troubleshoot it with a test light source and reset which pins in the `solar_tracker/setup.hpp`
 

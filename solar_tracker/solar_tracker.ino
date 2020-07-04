@@ -5,9 +5,7 @@ solarTracker tracker(resistors, motors, pos);
 
 void setup()
 {
-    // Include for debugging information
     Serial.begin(9600);
-    // Run the trackers setup routine
     tracker.setup();
 }
 
@@ -18,7 +16,6 @@ void loop()
 
     if (tracker.isThereLight())
     {
-        //if light source is unoptimized
         if (tracker.isUnoptimized())
         {
             tracker.optimize();
