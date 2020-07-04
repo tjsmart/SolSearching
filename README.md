@@ -3,10 +3,19 @@ SolSearching Repository
 
 Getting started
 ---
+First you will need to install the solarTracker library:
+- Download the .zip file from the releases section of GitHub
+- In Arduino, select SKETCH>IMPORT LIBRARY...>ADD LIBRARY... and find the .zip file
+- This will install the library in your My Documents (Windows) or Documents (Mac) folder under Arduino/libraries
+- You can also unzip the file, and install it in the above libraries folder manually
+- See arduino.cc/en/Guide/Libraries for more info on libraries
 
+To upload the solar tracker optimizer routine to your arduino simply open `optimizer/optimizer.ino` in the arduino IDE and upload it.
+
+
+Debugging
+---
 There are several tests present under the folder `tests` to confirm that your arduino and its components are working properly.
-
-To upload the solar tracker code to your arduino simply open `solar_tracker/solar_tracker.ino` in the arduino IDE and upload it.
 
 
 Expected pin ordering in current version
@@ -27,5 +36,5 @@ For the photoresistors, looking down the shaft of the cross:
 
 For the servos, the vertical (horizontal) servo should be attached to pin 9, 10.
 
-Worst case scenario, just troubleshoot it with a test light source and reset which pins in the `solar_tracker/setup.hpp`
+Worst case scenario, just troubleshoot it with a test light source and reset which pins in the `optimizer/setup.hpp`
 
