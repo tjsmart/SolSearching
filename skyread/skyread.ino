@@ -2,6 +2,7 @@
 #include "setup.hpp"
 
 solarTracker tracker(resistors, motors, pos);
+int motorPos[2];
 
 void setup()
 {
@@ -11,11 +12,13 @@ void setup()
 
 void loop()
 {
-    for (int x = 0, x < 180, x++)
+    for (int x = 0; x < 180; x++)
     {
-        for (int y = 0, y < 180, y++)
+        motorPos[0] = x;
+        for (int y = 0; y < 180; y++)
         {
-            tracker.moveMotors(x, y);
+            motorPos[1] = y;
+            tracker.setMotorPos(motorPos);
             tracker.readResistorDiff();
             tracker.printResistorDiff();
         }

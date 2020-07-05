@@ -29,6 +29,8 @@ public:
     int *getMotorPins();
     int *getMotorPos();
 
+    void setMotorPos(int *motorPos); 
+
     int *readResistorValues();
     int *readResistorDiff();
 
@@ -36,8 +38,8 @@ public:
     void printMotorDelta() const;
 
     void setup() const;
-    void optimize();
 
+    void optimize();
     bool isThereLight();
     bool isUnoptimized();
 };

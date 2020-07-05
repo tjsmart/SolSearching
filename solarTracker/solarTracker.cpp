@@ -10,6 +10,7 @@
 // [√] read method
 // [√] optimize method
 // [X] how to handle bother servos and steppers (perhaps type of motors should be specified at compile time? (with ifdef))
+// [X] reorganize this file to make the order match hpp
 
 // constants
 const int solarTracker::numResistors;
@@ -143,5 +144,15 @@ void solarTracker::optimize()
         motorDelta[i] = resistorDiff[i] / alpha;
         motorPos[i] = motorPos[i] + motorDelta[i];
         motor[i].write(motorPos[i], 10, true);
+    }
+}
+
+
+void solarTracker::setMotorPos(int *motorPos) 
+{
+    for (int i = 0; i < numMotors; i++)
+    {
+        this->motorPos[i] = motorPos[i];
+        motor[i].write(this->motorPos[i], 10, true);
     }
 }
