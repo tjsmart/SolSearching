@@ -20,7 +20,7 @@ void loop()
             motorPos[1] = y;
             tracker.setMotorPos(motorPos);
             tracker.readResistorDiff();
-            tracker.printResistorDiff();
+            tracker.printAll();
         }
     }
 }

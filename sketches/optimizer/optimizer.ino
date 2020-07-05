@@ -12,7 +12,7 @@ void setup()
 void loop()
 {
     tracker.readResistorDiff();
-    tracker.printResistorDiff();
+    tracker.printAll();
 
     if (tracker.isThereLight())
     {

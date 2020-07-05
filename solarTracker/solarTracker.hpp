@@ -34,7 +34,7 @@ public:
     int *readResistorValues();
     int *readResistorDiff();
 
-    void printResistorDiff() const;
+    void printAll() const;
     void printMotorDelta() const;
 
     void setup() const;

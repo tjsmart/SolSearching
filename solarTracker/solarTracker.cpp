@@ -89,9 +89,14 @@ int *solarTracker::readResistorDiff()
 }
 
 
-// print values of the resistors and their difference
-void solarTracker::printResistorDiff() const
+// print values of the motorpos, resistors and their difference
+void solarTracker::printAll() const
 {
+    for (int i = 0; i < numMotors; i++)
+    {
+        Serial.print(motorPos[i]);
+        Serial.print("\t");
+    }
     for (int i = 0; i < numResistors; i++)
     {
         Serial.print(resistorValues[i]);
