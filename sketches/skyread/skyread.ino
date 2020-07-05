@@ -12,10 +12,11 @@ void setup()
 
 void loop()
 {
-    for (int x = 0; x < 180; x++)
+    Serial.println("Begin skyread");
+    for (int x = 0; x < 90; x++)
     {
         motorPos[0] = x;
-        for (int y = 0; y < 180; y++)
+        for (int y = 0; y < 90; y++)
         {
             motorPos[1] = y;
             tracker.setMotorPos(motorPos);
@@ -23,4 +24,6 @@ void loop()
             tracker.printAll();
         }
     }
+    Serial.println("End skyread");
+    delay(forever);
 }

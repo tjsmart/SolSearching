@@ -1,0 +1,6 @@
+error no port:
+either port name is wrong or arduino is not connected
+
+error busy:
+fuser serial_port
+kill id
