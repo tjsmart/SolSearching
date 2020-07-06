@@ -1,6 +1,7 @@
 [√] Add tests (2681483)
 [√] Working version
 [√] Clean up code
-[X] Version to track and record entire space
+[√] Version to track and record entire space
+[X] Record entire space and do some plotting
 [X] Better optimization
 [X] Works for servos and steppers
