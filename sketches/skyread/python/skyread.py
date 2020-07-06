@@ -1,14 +1,6 @@
 #!/usr/bin/env python
 
 
-# TODO
-# [√] read serial monitor
-# [√] handle begin/end statements to control the data reading
-# [√] upon end -> write to excel or csv file
-# [√] during reading, plot live data
-# [√] upon end -> save plot
-# [X] handle user input (they need to specify serial port)
-
 import sys
 import serial
 import numpy as np
@@ -93,7 +85,7 @@ def main():
     ser = serial.Serial(args.serial_port, baudrate=9600, timeout=100)
     # animation
     plt.style.use('seaborn-paper')
-    ani = FuncAnimation(plt.gcf(), plot_animation, interval=100)
+    ani = FuncAnimation(plt.gcf(), plot_animation, interval=100)    # noqa:F841
     plt.show()
 
 

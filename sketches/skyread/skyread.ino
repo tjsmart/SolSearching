@@ -13,12 +13,12 @@ void setup()
 void loop()
 {
     Serial.println("Begin skyread");
-    for (int x = 40; x < 50; x++)
+    for (int y = 0; y < 90; y++)
     {
-        motorPos[0] = x;
-        for (int y = 40; y < 50; y++)
+        motorPos[0] = y;
+        for (int x = 0; x < 180; x++)
         {
-            motorPos[1] = y;
+            motorPos[1] = x;
             tracker.setMotorPos(motorPos);
             tracker.readResistorDiff();
             tracker.printAll();
