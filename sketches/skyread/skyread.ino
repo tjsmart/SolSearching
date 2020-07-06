@@ -13,10 +13,10 @@ void setup()
 void loop()
 {
     Serial.println("Begin skyread");
-    for (int x = 0; x < 90; x++)
+    for (int x = 40; x < 50; x++)
     {
         motorPos[0] = x;
-        for (int y = 0; y < 90; y++)
+        for (int y = 40; y < 50; y++)
         {
             motorPos[1] = y;
             tracker.setMotorPos(motorPos);
