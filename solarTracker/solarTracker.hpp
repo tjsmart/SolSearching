@@ -29,17 +29,17 @@ public:
     int *getMotorPins();
     int *getMotorPos();
 
-    void setMotorPos(int *motorPos); 
-
     int *readResistorValues();
     int *readResistorDiff();
+
+    void setMotorPos(int *motorPos); 
 
     void printAll() const;
     void printMotorDelta() const;
 
     void setup() const;
 
-    void optimize();
     bool isThereLight();
     bool isUnoptimized();
+    void optimize();
 };

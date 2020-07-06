@@ -20,7 +20,9 @@ const int solarTracker::numMotors;
 solarTracker::solarTracker(int resistorPins[4], int motorPins[2], int motorPos[2])
 {
     for (int i = 0; i < this->numResistors; i++)
+    {
         this->resistorPins[i] = resistorPins[i];
+    }
     for (int i = 0; i < this->numMotors; i++)
     {
         this->motorPins[i] = motorPins[i];
@@ -28,27 +30,9 @@ solarTracker::solarTracker(int resistorPins[4], int motorPins[2], int motorPos[2
     }
 }
 
-// deconstructor
+// destructor
 solarTracker::~solarTracker()
 {
-}
-
-// attach pins and write initial positions
-void solarTracker::setup() const
-{
-    // establish resistor pins as output and write them as HIGH
-    for (int i = 0; i < this->numResistors; i++)
-    {
-        pinMode(resistorPins[i], OUTPUT);
-        digitalWrite(resistorPins[i], HIGH);
-    }
-
-    // attach servos and write their inital positions
-    for (int i = 0; i < this->numMotors; i++)
-    {
-        motor[i].attach(motorPins[i]);
-        motor[i].write(motorPos[i], 10, true);
-    }
 }
 
 // return the value of resistorPins
@@ -73,7 +57,9 @@ int *solarTracker::getMotorPos()
 int *solarTracker::readResistorValues()
 {
     for (int i = 0; i < numResistors; i++)
+    {
         resistorValues[i] = analogRead(resistorPins[i]);
+    }
     return resistorValues;
 }
 
@@ -86,6 +72,15 @@ int *solarTracker::readResistorDiff()
         resistorDiff[i] = resistorValues[i + 2] - resistorValues[i];
     }
     return resistorDiff;
+}
+
+void solarTracker::setMotorPos(int *motorPos) 
+{
+    for (int i = 0; i < numMotors; i++)
+    {
+        this->motorPos[i] = motorPos[i];
+        motor[i].write(this->motorPos[i], 10, true);
+    }
 }
 
 
@@ -106,7 +101,9 @@ void solarTracker::printAll() const
     {
         Serial.print(resistorDiff[i]);
         if (i != (numMotors - 1))
+        {
             Serial.print("\t");
+        }
     }
     Serial.println();
 }
@@ -118,17 +115,41 @@ void solarTracker::printMotorDelta() const
     {
         Serial.print(motorDelta[i]);
         if (i != (numMotors - 1))
+        {
             Serial.print("\t");
+        }
     }
     Serial.println();
+}
+
+// attach pins and write initial positions
+void solarTracker::setup() const
+{
+    // establish resistor pins as output and write them as HIGH
+    for (int i = 0; i < this->numResistors; i++)
+    {
+        pinMode(resistorPins[i], OUTPUT);
+        digitalWrite(resistorPins[i], HIGH);
+    }
+
+    // attach servos and write their inital positions
+    for (int i = 0; i < this->numMotors; i++)
+    {
+        motor[i].attach(motorPins[i]);
+        motor[i].write(motorPos[i], 10, true);
+    }
 }
 
 // returns true if any resistors are below the darkThresh
 bool solarTracker::isThereLight()
 {
     for (int i = 0; i < numResistors; i++)
+    {
         if (resistorValues[i] < darkThresh)
+        {
             return true;
+        }
+    }
     return false;
 }
 
@@ -136,8 +157,12 @@ bool solarTracker::isThereLight()
 bool solarTracker::isUnoptimized()
 {
     for (int i = 0; i < numMotors; i++)
+    {
         if (abs(resistorDiff[i]) > optThresh)
+        {
             return true;
+        }
+    }
     return false;
 }
 
@@ -153,11 +178,3 @@ void solarTracker::optimize()
 }
 
 
-void solarTracker::setMotorPos(int *motorPos) 
-{
-    for (int i = 0; i < numMotors; i++)
-    {
-        this->motorPos[i] = motorPos[i];
-        motor[i].write(this->motorPos[i], 10, true);
-    }
-}
