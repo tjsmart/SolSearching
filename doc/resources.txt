@@ -1,0 +1,4 @@
+osepp servo and shield -- https://www.osepp.com/electronic-modules/shields/49-motor-servo-shield
+    |--> adafruit library -- https://github.com/adafruit/Adafruit-Motor-Shield-library
+        |--> more info -- https://learn.adafruit.com/adafruit-motor-shield-v2-for-arduino/using-stepper-motors
+kyasan 1124090 stepper motor -- https://ultimachine.com/products/kysan-1124090-nema-17-stepper-motor
