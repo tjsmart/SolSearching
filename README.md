@@ -1,26 +1,43 @@
 SolSearching Repository
 ===
 
-Getting started
+Getting started (using solarTracker library)
 ---
-First you will need to install the solarTracker library:
-- Download the .zip file from the releases section of GitHub
-- In Arduino, select SKETCH>IMPORT LIBRARY...>ADD LIBRARY... and find the .zip file
-- This will install the library in your My Documents (Windows) or Documents (Mac) folder under Arduino/libraries
-- You can also unzip the file, and install it in the above libraries folder manually
-- See arduino.cc/en/Guide/Libraries for more info on libraries
+From cloned repository:
 
-To upload the solar tracker optimizer routine to your arduino simply open `sketches/optimizer/optimizer.ino` in the arduino IDE and upload it.
+1. Download or clone this repository onto your computer
+2. Copy or symlink the solarTracker folder (not the entire repo) to the location of your arduino libraries.
+    - On Mac: `cp -r solarTracker ~/Documents/Arduino/Library` or `ln -fs $PWD/solarTracker ~/Documents/Arduino/Library`
 
-To upload the skyread routine see `sketches/skyread/skyread.ino`, also try the live python plotting and recording under `sketches/skyread/python/skyread.py` .
+From release:
+
+1. Download from the latest release `solarTracker.zip`.
+2. In the arduino IDE, navigate to Sketch->Include Library->Add .ZIP Library...
+3. Select the `solarTracker.zip` file you just downloaded.
+
+Getting started (using example sketches)
+---
+
+The optimizer sketch, configures the solarTracker to search for the brightest light source and track it over time.
+To upload the solar tracker optimizer sketch to your arduino open `sketches/optimizer/optimizer.ino` in the arduino IDE and upload it to your arduino.
+
+The skyread sketch, configures the solarTracker to take a survey of the entire sky and print the values of the photoresistors to the serial monitor.
+To upload the skyread sketch open `sketches/skyread/skyread.ino` with the arduino IDE.
+Also, try the live python plotting and recording under `sketches/skyread/python/skyread.py`.
 
 
 Debugging
 ---
 There are several tests present under the folder `tests` to confirm that your arduino and its components are working properly.
 
+Contents of this repository
+---
+- [doc](doc/) -> documentation including a todo list and some resources
+- [sketches](sketches/) -> arduino sketches
+- [solarTracker](solarTracker/) -> solarTracker library
 
-Expected pin ordering in current version
+
+Expected pin ordering in current version (**unconfirmed**)
 ---
 
 For the photoresistors, looking down the shaft of the cross:
