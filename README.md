@@ -7,7 +7,8 @@ From cloned repository:
 
 1. Download or clone this repository onto your computer
 2. Copy or symlink the solarTracker folder (not the entire repo) to the location of your arduino libraries.
-    - On Mac: `cp -r solarTracker ~/Documents/Arduino/Library` or `ln -fs $PWD/solarTracker ~/Documents/Arduino/Library`
+    - On Mac with copy: `cp -r solarTracker ~/Documents/Arduino/Library`
+    - On Mac with symlink: `ln -fs $PWD/solarTracker ~/Documents/Arduino/Library`
 
 From release:
 
