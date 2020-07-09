@@ -1,23 +1,14 @@
-#include "solarTracker.hpp"
+#include "SolarTracker.hpp"
 #include <Arduino.h>
 #include <VarSpeedServo.h>
 
-// [√] photoresistor pins as int array
-// [√] servo pins as int array
-// [√] add motors as an attribute
-// [√] constructor should pass prPins, srvPins, startingPos
-// [√] setup method
-// [√] read method
-// [√] optimize method
-// [X] how to handle bother servos and steppers (perhaps type of motors should be specified at compile time? (with ifdef))
-// [X] reorganize this file to make the order match hpp
 
 // constants
-const int solarTracker::numResistors;
-const int solarTracker::numMotors;
+const int SolarTracker::numResistors;
+const int SolarTracker::numMotors;
 
 // constructor
-solarTracker::solarTracker(int resistorPins[4], int motorPins[2], int motorPos[2])
+SolarTracker::SolarTracker(int resistorPins[4], int motorPins[2], int motorPos[2])
 {
     for (int i = 0; i < this->numResistors; i++)
     {
@@ -31,30 +22,30 @@ solarTracker::solarTracker(int resistorPins[4], int motorPins[2], int motorPos[2
 }
 
 // destructor
-solarTracker::~solarTracker()
+SolarTracker::~SolarTracker()
 {
 }
 
 // return the value of resistorPins
-int *solarTracker::getResistorPins()
+int *SolarTracker::getResistorPins()
 {
     return resistorPins;
 }
 
 // return the value of motorPins
-int *solarTracker::getMotorPins()
+int *SolarTracker::getMotorPins()
 {
     return motorPins;
 }
 
 // return the of motorPos
-int *solarTracker::getMotorPos()
+int *SolarTracker::getMotorPos()
 {
     return motorPos;
 }
 
 // analog read the resistorPins and store to resistorValues
-int *solarTracker::readResistorValues()
+int *SolarTracker::readResistorValues()
 {
     for (int i = 0; i < numResistors; i++)
     {
@@ -64,7 +55,7 @@ int *solarTracker::readResistorValues()
 }
 
 // calls readResistorValues and then computes difference between top/bottom, left/right
-int *solarTracker::readResistorDiff()
+int *SolarTracker::readResistorDiff()
 {
     readResistorValues();
     for (int i = 0; i < numMotors; i++)
@@ -74,7 +65,7 @@ int *solarTracker::readResistorDiff()
     return resistorDiff;
 }
 
-void solarTracker::setMotorPos(int *motorPos) 
+void SolarTracker::setMotorPos(int *motorPos) 
 {
     for (int i = 0; i < numMotors; i++)
     {
@@ -85,7 +76,7 @@ void solarTracker::setMotorPos(int *motorPos)
 
 
 // print values of the motorpos, resistors and their difference
-void solarTracker::printAll() const
+void SolarTracker::printAll() const
 {
     for (int i = 0; i < numMotors; i++)
     {
@@ -109,7 +100,7 @@ void solarTracker::printAll() const
 }
 
 // print the values of the calculated motor delta (how much they were moved in the last step)
-void solarTracker::printMotorDelta() const
+void SolarTracker::printMotorDelta() const
 {
     for (int i = 0; i < numMotors; i++)
     {
@@ -123,7 +114,7 @@ void solarTracker::printMotorDelta() const
 }
 
 // attach pins and write initial positions
-void solarTracker::setup() const
+void SolarTracker::setup() const
 {
     // establish resistor pins as output and write them as HIGH
     for (int i = 0; i < this->numResistors; i++)
@@ -141,7 +132,7 @@ void solarTracker::setup() const
 }
 
 // returns true if any resistors are below the darkThresh
-bool solarTracker::isThereLight()
+bool SolarTracker::isThereLight()
 {
     for (int i = 0; i < numResistors; i++)
     {
@@ -154,7 +145,7 @@ bool solarTracker::isThereLight()
 }
 
 // returns true if any resistorDiff is above optThresh
-bool solarTracker::isUnoptimized()
+bool SolarTracker::isUnoptimized()
 {
     for (int i = 0; i < numMotors; i++)
     {
@@ -167,7 +158,7 @@ bool solarTracker::isUnoptimized()
 }
 
 // computes motorDelta, and updates motorPos to optimize the positions
-void solarTracker::optimize()
+void SolarTracker::optimize()
 {
     for (int i = 0; i < numMotors; i++)
     {

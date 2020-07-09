@@ -4,4 +4,4 @@
 [√] Version to track and record entire space
 [X] Record entire space and do some plotting
 [X] Better optimization
-[X] Works for servos and steppers
+[X] Works for servos and steppers (perhaps type of motors should be specified at compile time? (with ifdef))

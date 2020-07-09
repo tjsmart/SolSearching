@@ -1,7 +1,7 @@
 #pragma once
 #include <VarSpeedServo.h>
 
-class solarTracker
+class SolarTracker
 {
 protected:
     static const int numResistors = 4;      // number of (photo)resistors
@@ -18,12 +18,12 @@ protected:
     int motorDelta[numMotors];              // the change to the position made in last step
 
     int darkThresh = 1000;                  // threshold to consider when there is no light
-    int optThresh = 50;                     // threshold to consider when the solarTracker is optimized
+    int optThresh = 50;                     // threshold to consider when the SolarTracker is optimized
     int alpha = 100;                        // motorDelta = resistorDiff / alpha
 
 public:
-    solarTracker(int *resistorPins, int *motorPins, int *motorPos);
-    ~solarTracker();
+    SolarTracker(int *resistorPins, int *motorPins, int *motorPos);
+    ~SolarTracker();
 
     int *getResistorPins();
     int *getMotorPins();
