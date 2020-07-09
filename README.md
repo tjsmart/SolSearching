@@ -1,28 +1,28 @@
 SolSearching Repository
 ===
 
-Getting started (using solarTracker library)
+Getting started (using SolarTracker library)
 ---
 From cloned repository:
 
 1. Download or clone this repository onto your computer
-2. Copy or symlink the solarTracker folder (not the entire repo) to the location of your arduino libraries.
-    - On Mac with copy: `cp -r solarTracker ~/Documents/Arduino/Library`
-    - On Mac with symlink: `ln -fs $PWD/solarTracker ~/Documents/Arduino/Library`
+2. Copy or symlink the SolarTracker folder (not the entire repo) to the location of your arduino libraries.
+    - On Mac with copy: `cp -r SolarTracker ~/Documents/Arduino/Library`
+    - On Mac with symlink: `ln -fs $PWD/SolarTracker ~/Documents/Arduino/Library`
 
 From release:
 
-1. Download from the latest release `solarTracker.zip`.
+1. Download from the latest release `SolarTracker.zip`.
 2. In the arduino IDE, navigate to Sketch->Include Library->Add .ZIP Library...
-3. Select the `solarTracker.zip` file you just downloaded.
+3. Select the `SolarTracker.zip` file you just downloaded.
 
 Getting started (using example sketches)
 ---
 
-The optimizer sketch, configures the solarTracker to search for the brightest light source and track it over time.
+The optimizer sketch, configures the SolarTracker to search for the brightest light source and track it over time.
 To upload the solar tracker optimizer sketch to your arduino open `sketches/optimizer/optimizer.ino` in the arduino IDE and upload it to your arduino.
 
-The skyread sketch, configures the solarTracker to take a survey of the entire sky and print the values of the photoresistors to the serial monitor.
+The skyread sketch, configures the SolarTracker to take a survey of the entire sky and print the values of the photoresistors to the serial monitor.
 To upload the skyread sketch open `sketches/skyread/skyread.ino` with the arduino IDE.
 Also, try the live python plotting and recording under `sketches/skyread/python/skyread.py`.
 
@@ -35,7 +35,7 @@ Contents of this repository
 ---
 - [doc](doc/) -> documentation including a todo list and some resources
 - [sketches](sketches/) -> arduino sketches
-- [solarTracker](solarTracker/) -> solarTracker library
+- [SolarTracker](SolarTracker/) -> SolarTracker library
 
 
 Expected pin ordering in current version (**unconfirmed**)

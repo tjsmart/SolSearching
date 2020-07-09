@@ -1,7 +1,7 @@
-#include <solarTracker.hpp>
+#include <SolarTracker.hpp>
 #include "setup.hpp"
 
-solarTracker tracker(resistors, motors, pos);
+SolarTracker tracker(resistors, motors, pos);
 int motorPos[2];
 
 void setup()
