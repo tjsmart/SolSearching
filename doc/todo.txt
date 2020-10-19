@@ -1,7 +1,14 @@
+Previous:
 [√] Add tests (2681483)
 [√] Working version
 [√] Clean up code
 [√] Version to track and record entire space
+
+Current:
+[X] Works for steppers
+
+Other (wishlist):
+[X] Works for servos and steppers
+    [X] preprocessor OR [X] template
 [X] Record entire space and do some plotting
 [X] Better optimization
-[X] Works for servos and steppers (perhaps type of motors should be specified at compile time? (with ifdef))

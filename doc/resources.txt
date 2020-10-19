@@ -1,4 +1,13 @@
+We are using the adafruit v2 motor shield:
+osepp servo and shield -- https://www.adafruit.com/product/1438
+    |--> adafruit library -- https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library
+        |--> more info -- https://learn.adafruit.com/adafruit-motor-shield-v2-for-arduino/using-stepper-motors
+
+With this stepper motor:
+kyasan 1124090 stepper motor -- https://ultimachine.com/products/kysan-1124090-nema-17-stepper-motor
+
+
+Note v1 shield is DEPRECATED and commonly has compatibility issues with our stepper.
+DO NOT USE THESE LINKS:
 osepp servo and shield -- https://www.osepp.com/electronic-modules/shields/49-motor-servo-shield
     |--> adafruit library -- https://github.com/adafruit/Adafruit-Motor-Shield-library
-        |--> more info -- https://learn.adafruit.com/adafruit-motor-shield-v2-for-arduino/using-stepper-motors
-kyasan 1124090 stepper motor -- https://ultimachine.com/products/kysan-1124090-nema-17-stepper-motor
