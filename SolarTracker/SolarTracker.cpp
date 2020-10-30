@@ -1,23 +1,24 @@
 #include "SolarTracker.hpp"
 #include <Arduino.h>
-#include <VarSpeedServo.h>
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
 
 
 // constants
 const int SolarTracker::numResistors;
 const int SolarTracker::numMotors;
 
-// constructor
-SolarTracker::SolarTracker(int resistorPins[4], int motorPins[2], int motorPos[2])
+SolarTracker::SolarTracker(int resistorPins[4], int motorPorts[2])
 {
+    // this->constructor(resistorPins, motorPorts, stepsPerRev);
     for (int i = 0; i < this->numResistors; i++)
     {
         this->resistorPins[i] = resistorPins[i];
     }
     for (int i = 0; i < this->numMotors; i++)
     {
-        this->motorPins[i] = motorPins[i];
-        this->motorPos[i] = motorPos[i];
+        // if ((motorPorts[i] != 1) and (motorPorts[i] != 2)) this->die();
+        this->motorPorts[i] = motorPorts[i];
     }
 }
 
@@ -32,16 +33,10 @@ int *SolarTracker::getResistorPins()
     return resistorPins;
 }
 
-// return the value of motorPins
-int *SolarTracker::getMotorPins()
+// return the value of motorPorts
+int *SolarTracker::getMotorPorts()
 {
-    return motorPins;
-}
-
-// return the of motorPos
-int *SolarTracker::getMotorPos()
-{
-    return motorPos;
+    return motorPorts;
 }
 
 // analog read the resistorPins and store to resistorValues
@@ -65,24 +60,9 @@ int *SolarTracker::readResistorDiff()
     return resistorDiff;
 }
 
-void SolarTracker::setMotorPos(int *motorPos) 
-{
-    for (int i = 0; i < numMotors; i++)
-    {
-        this->motorPos[i] = motorPos[i];
-        motor[i].write(this->motorPos[i], 10, true);
-    }
-}
-
-
-// print values of the motorpos, resistors and their difference
+// print values of the resistors and their difference
 void SolarTracker::printAll() const
 {
-    for (int i = 0; i < numMotors; i++)
-    {
-        Serial.print(motorPos[i]);
-        Serial.print("\t");
-    }
     for (int i = 0; i < numResistors; i++)
     {
         Serial.print(resistorValues[i]);
@@ -100,11 +80,11 @@ void SolarTracker::printAll() const
 }
 
 // print the values of the calculated motor delta (how much they were moved in the last step)
-void SolarTracker::printMotorDelta() const
+void SolarTracker::printMotorDir() const
 {
     for (int i = 0; i < numMotors; i++)
     {
-        Serial.print(motorDelta[i]);
+        Serial.print(motorDir[i]);
         if (i != (numMotors - 1))
         {
             Serial.print("\t");
@@ -113,8 +93,8 @@ void SolarTracker::printMotorDelta() const
     Serial.println();
 }
 
-// attach pins and write initial positions
-void SolarTracker::setup() const
+// attach pins for photoresistor and instatiate motors
+void SolarTracker::setup(int stepsPerRev)
 {
     // establish resistor pins as output and write them as HIGH
     for (int i = 0; i < this->numResistors; i++)
@@ -126,10 +106,36 @@ void SolarTracker::setup() const
     // attach servos and write their inital positions
     for (int i = 0; i < this->numMotors; i++)
     {
-        motor[i].attach(motorPins[i]);
-        motor[i].write(motorPos[i], 10, true);
+        // Connect two stepper motors to the motor ports
+        this->motor[i] = this->AFMS.getStepper(stepsPerRev, motorPorts[i]);
     }
 }
+
+void SolarTracker::setup(int stepsPerRev, int revSpeed[2])
+{
+    // this->setup(stepsPerRev);
+    setup(stepsPerRev);
+    // set speed of each stepper
+    for (int i = 0; i < this->numMotors; i++)
+    {
+        this->motor[i]->setSpeed(revSpeed[i]);
+    }
+}
+
+void SolarTracker::setup(int stepsPerRev, int revSpeed[2], int stepStyle)
+{
+    // bool stepStyleIsValid = false;
+    // for (int i = 1; i <= 4; i++)
+    // {
+    //     if (stepStyle == i) stepStyleIsValid = true;
+    // }
+    // if (!stepStyleIsValid) this->die();
+
+    setup(stepsPerRev, revSpeed);
+    // set a default step style -- otherwise user must specify
+    this->stepStyle = stepStyle;
+}
+
 
 // returns true if any resistors are below the darkThresh
 bool SolarTracker::isThereLight()
@@ -157,15 +163,63 @@ bool SolarTracker::isUnoptimized()
     return false;
 }
 
-// computes motorDelta, and updates motorPos to optimize the positions
+// computes motorDir, and updates motorPos to optimize the positions
 void SolarTracker::optimize()
 {
+    int stepSize = 1;
     for (int i = 0; i < numMotors; i++)
     {
-        motorDelta[i] = resistorDiff[i] / alpha;
-        motorPos[i] = motorPos[i] + motorDelta[i];
-        motor[i].write(motorPos[i], 10, true);
+        if (resistorDiff[i] > optThresh)
+        {
+            motorDir[i] = BACKWARD;
+        } else if (resistorDiff[i] < -optThresh) {
+            motorDir[i] = FORWARD;
+        } else {
+            motorDir[i] = 0;
+            continue;
+        }
+
+        motor[i]->step(stepSize, motorDir[i], stepStyle);
     }
 }
 
+// same as above but fully optimizes along a single axis (dir should be 0 or 1)
+void SolarTracker::fullAxisOptimize(int axis, int stepSize)
+{
+    // read resistors and print their values
+    readResistorDiff();
+    printAll();
 
+    // determine movement direction
+    if (resistorDiff[axis] > optThresh)
+    {
+        motorDir[axis] = BACKWARD;
+    } else if (resistorDiff[axis] < -optThresh) {
+        motorDir[axis] = FORWARD;
+    } else {
+        motorDir[axis] = 0;
+    }
+
+    // print movement
+    Serial.print("Moving motor:\t");
+    Serial.print(axis);
+    Serial.print("\t");
+    Serial.print(motorDir[axis]);
+    Serial.println();
+
+    if (motorDir[axis] == 0)
+    {
+        Serial.println("Axis Optimized! :)");
+        return;
+    } else {
+        motor[axis]->step(stepSize, motorDir[axis], stepStyle);
+        // recurse
+        fullAxisOptimize(axis, stepSize);
+    }
+}
+
+void SolarTracker::fullAxisOptimize(int axis)
+{
+    // defaults stepSize to 1
+    fullAxisOptimize(axis, 1);
+}

@@ -1,5 +1,7 @@
 #pragma once
-#include <VarSpeedServo.h>
+
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
 
 class SolarTracker
 {
@@ -8,38 +10,50 @@ protected:
     static const int numMotors = 2;         // number of motors
 
     int resistorPins[numResistors];         // pins the resistors are attached to
-    int motorPins[numMotors];               // pins the motors are attached to
+    int motorPorts[numMotors];              // pins the motors are attached to
 
     int resistorValues[numResistors];       // current values of the resistors
     int resistorDiff[numMotors];            // current difference between top/bottom, left/right
 
-    VarSpeedServo motor[numMotors];         // the motors (see online doc for more info)
-    int motorPos[numMotors];                // the position of the motors
-    int motorDelta[numMotors];              // the change to the position made in last step
+
+
+    Adafruit_MotorShield AFMS = Adafruit_MotorShield();     // Motor shield object with the default I2C address
+    Adafruit_StepperMotor *motor[numMotors];                // Stepper motors
+    int motorDir[numMotors];                                // Movement of motors can be 0 (NONE), 1 (FORWARD), 2 (BACKWARD)
+    int stepStyle;                                          // Can be 1 (SINGLE), 2 (DOUBLE), 3 (INTERLEAVE), or 4 (MICROSTEP)
 
     int darkThresh = 1000;                  // threshold to consider when there is no light
     int optThresh = 50;                     // threshold to consider when the SolarTracker is optimized
-    int alpha = 100;                        // motorDelta = resistorDiff / alpha
+
+    // these could be moved to public but would required sophisticated usage, keeping them private for now for safety
+    void setup(int stepsPerRev);
+    void setup(int stepsPerRev, int *revSpeed);
+
 
 public:
-    SolarTracker(int *resistorPins, int *motorPins, int *motorPos);
+    // SolarTracker(int *resistorPins, int *motorPins, int *motorPos);
+    SolarTracker(int *resistorPins, int *motorPorts);
     ~SolarTracker();
 
     int *getResistorPins();
-    int *getMotorPins();
-    int *getMotorPos();
+    int *getMotorPorts();
+    // int *getMotorPos();
 
     int *readResistorValues();
     int *readResistorDiff();
 
-    void setMotorPos(int *motorPos); 
+    // void setMotorPos(int *motorPos);
+    void moveMotors(int *motorDelta, int *motorDir);
 
     void printAll() const;
-    void printMotorDelta() const;
+    void printMotorDir() const;
 
-    void setup() const;
+    void setup(int stepsPerRev, int *revSpeed, int stepStyle);
 
     bool isThereLight();
     bool isUnoptimized();
     void optimize();
+
+    void fullAxisOptimize(int axis, int stepSize);
+    void fullAxisOptimize(int axis);
 };
