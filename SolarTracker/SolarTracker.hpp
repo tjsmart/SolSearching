@@ -20,7 +20,7 @@ protected:
     Adafruit_MotorShield AFMS = Adafruit_MotorShield();     // Motor shield object with the default I2C address
     Adafruit_StepperMotor *motor[numMotors];                // Stepper motors
     int motorDir[numMotors];                                // Movement of motors can be 0 (NONE), 1 (FORWARD), 2 (BACKWARD)
-    int stepStyle;                                          // Can be 1 (SINGLE), 2 (DOUBLE), 3 (INTERLEAVE), or 4 (MICROSTEP)
+    int stepStyle[numMotors];                                          // Can be 1 (SINGLE), 2 (DOUBLE), 3 (INTERLEAVE), or 4 (MICROSTEP)
 
     int darkThresh = 1000;                  // threshold to consider when there is no light
     int optThresh = 50;                     // threshold to consider when the SolarTracker is optimized
@@ -48,7 +48,7 @@ public:
     void printAll() const;
     void printMotorDir() const;
 
-    void setup(int stepsPerRev, int *revSpeed, int stepStyle);
+    void setup(int stepsPerRev, int *revSpeed, int *stepStyle);
 
     bool isThereLight();
     bool isUnoptimized();

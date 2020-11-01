@@ -122,7 +122,7 @@ void SolarTracker::setup(int stepsPerRev, int revSpeed[2])
     }
 }
 
-void SolarTracker::setup(int stepsPerRev, int revSpeed[2], int stepStyle)
+void SolarTracker::setup(int stepsPerRev, int revSpeed[2], int stepStyle[2])
 {
     // bool stepStyleIsValid = false;
     // for (int i = 1; i <= 4; i++)
@@ -133,7 +133,10 @@ void SolarTracker::setup(int stepsPerRev, int revSpeed[2], int stepStyle)
 
     setup(stepsPerRev, revSpeed);
     // set a default step style -- otherwise user must specify
-    this->stepStyle = stepStyle;
+    for (int i = 0; i < this->numMotors; i++)
+    {
+        this->stepStyle[i] = stepStyle[i];
+    }
 }
 
 
@@ -179,7 +182,7 @@ void SolarTracker::optimize()
             continue;
         }
 
-        motor[i]->step(stepSize, motorDir[i], stepStyle);
+        motor[i]->step(stepSize, motorDir[i], stepStyle[i]);
     }
 }
 
@@ -212,7 +215,7 @@ void SolarTracker::fullAxisOptimize(int axis, int stepSize)
         Serial.println("Axis Optimized! :)");
         return;
     } else {
-        motor[axis]->step(stepSize, motorDir[axis], stepStyle);
+        motor[axis]->step(stepSize, motorDir[axis], stepStyle[axis]);
         // recurse
         fullAxisOptimize(axis, stepSize);
     }

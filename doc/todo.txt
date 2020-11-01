@@ -1,11 +1,4 @@
-Previous:
-[√] Add tests (2681483)
-[√] Working version
-[√] Clean up code
-[√] Version to track and record entire space
-
 Current:
-[X] Works for steppers
 
 Other (wishlist):
 [X] Works for servos and steppers

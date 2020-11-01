@@ -1,3 +1,4 @@
+========================= Basic info on our parts ==========================================
 We are using the adafruit v2 motor shield:
 osepp servo and shield -- https://www.adafruit.com/product/1438
     |--> adafruit library -- https://github.com/adafruit/Adafruit_Motor_Shield_V2_Library
@@ -6,7 +7,14 @@ osepp servo and shield -- https://www.adafruit.com/product/1438
 With this stepper motor:
 kyasan 1124090 stepper motor -- https://ultimachine.com/products/kysan-1124090-nema-17-stepper-motor
 
+========================= Motor step styles ================================================
+"Single" means single-coil activation
+"Double" means 2 coils are activated at once (for higher torque)
+"Interleave" means that it alternates between single and double to get twice the resolution (but of course its half the speed).
+"Microstepping" is a method where the coils are PWM'd to create smooth motion between steps.
 
+
+========================= Links to avoid! ==================================================
 Note v1 shield is DEPRECATED and commonly has compatibility issues with our stepper.
 DO NOT USE THESE LINKS:
 osepp servo and shield -- https://www.osepp.com/electronic-modules/shields/49-motor-servo-shield
