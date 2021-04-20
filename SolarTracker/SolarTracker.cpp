@@ -40,7 +40,7 @@ int *SolarTracker::getMotorPorts()
 }
 
 // analog read the resistorPins and store to resistorValues
-int *SolarTracker::readResistorValues()
+int SolarTracker::readResistorValues()
 {
     for (int i = 0; i < numResistors; i++)
     {
@@ -94,27 +94,31 @@ void SolarTracker::printMotorDir() const
 }
 
 // attach pins for photoresistor and instatiate motors
-void SolarTracker::setup(int stepsPerRev)
+void SolarTracker::setup()
 {
     // establish resistor pins as output and write them as HIGH
     for (int i = 0; i < this->numResistors; i++)
     {
-        pinMode(resistorPins[i], OUTPUT);
-        digitalWrite(resistorPins[i], HIGH);
+        if (resistorPins[i] == 0){
+            pinMode(6, OUTPUT);
+            digitalWrite(6, HIGH);
+        } else if (resistorPins[i] == 1)
+        {
+            pinMode(7, OUTPUT);
+            digitalWrite(7, HIGH);
+        } else {
+            pinMode(resistorPins[i], OUTPUT);
+            digitalWrite(resistorPins[i], HIGH);
+        }
     }
-
-    // attach servos and write their inital positions
-    for (int i = 0; i < this->numMotors; i++)
-    {
-        // Connect two stepper motors to the motor ports
-        this->motor[i] = this->AFMS.getStepper(stepsPerRev, motorPorts[i]);
-    }
+    // create AFMS with default frequency 1.6Khz
+    AFMS.begin();
 }
 
-void SolarTracker::setup(int stepsPerRev, int revSpeed[2])
+void SolarTracker::setup(int revSpeed[2])
 {
     // this->setup(stepsPerRev);
-    setup(stepsPerRev);
+    setup();
     // set speed of each stepper
     for (int i = 0; i < this->numMotors; i++)
     {
@@ -122,7 +126,7 @@ void SolarTracker::setup(int stepsPerRev, int revSpeed[2])
     }
 }
 
-void SolarTracker::setup(int stepsPerRev, int revSpeed[2], int stepStyle[2])
+void SolarTracker::setup(int revSpeed[2], int stepStyle[2])
 {
     // bool stepStyleIsValid = false;
     // for (int i = 1; i <= 4; i++)
@@ -131,7 +135,7 @@ void SolarTracker::setup(int stepsPerRev, int revSpeed[2], int stepStyle[2])
     // }
     // if (!stepStyleIsValid) this->die();
 
-    setup(stepsPerRev, revSpeed);
+    setup(revSpeed);
     // set a default step style -- otherwise user must specify
     for (int i = 0; i < this->numMotors; i++)
     {
@@ -208,6 +212,8 @@ void SolarTracker::fullAxisOptimize(int axis, int stepSize)
     Serial.print(axis);
     Serial.print("\t");
     Serial.print(motorDir[axis]);
+    Serial.print("\t");
+    Serial.print(stepSize);
     Serial.println();
 
     if (motorDir[axis] == 0)
@@ -225,4 +231,18 @@ void SolarTracker::fullAxisOptimize(int axis)
 {
     // defaults stepSize to 1
     fullAxisOptimize(axis, 1);
+}
+
+
+void SolarTracker::moveMotor(int axis, int stepSize, int stepDir, int stepStyle)
+{
+    Serial.print("Moving motor axis=");
+    Serial.print(axis);
+    Serial.print(" step=");
+    Serial.print(stepSize);
+    Serial.print(" dir=");
+    Serial.print(stepDir);
+    Serial.print(" style=");
+    Serial.println(stepStyle);
+    motor[axis]->step(stepSize, stepDir, stepStyle);
 }

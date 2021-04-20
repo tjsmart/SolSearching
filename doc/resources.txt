@@ -7,6 +7,11 @@ osepp servo and shield -- https://www.adafruit.com/product/1438
 With this stepper motor:
 kyasan 1124090 stepper motor -- https://ultimachine.com/products/kysan-1124090-nema-17-stepper-motor
 
+Note i2c disables usage of A4/A5 pins:
+    https://www.arduino.cc/en/Reference/Wire
+    https://stackoverflow.com/questions/42022000/which-pins-should-i-take-for-i2c-on-arduino-uno
+    https://forum.arduino.cc/index.php?topic=109649.0
+
 ========================= Motor step styles ================================================
 "Single" means single-coil activation
 "Double" means 2 coils are activated at once (for higher torque)

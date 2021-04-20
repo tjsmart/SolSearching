@@ -44,14 +44,14 @@ Expected pin ordering in current version (**unconfirmed**)
 For the photoresistors, looking down the shaft of the cross:
 
 ```
-       top(2)  
+       top(1)  
        \    /  
         \  /  
- left(3) \/ right(5)  
+ left(4) \/ right(2)  
          /\  
         /  \  
        /    \  
-       bottom(4)  
+       bottom(3)  
 ```
 
 For the servos, the vertical (horizontal) servo should be attached to pin 9, 10.

@@ -22,11 +22,11 @@
 // our stepper is 200 steps per revolution (1.8 degree per step)
 int steps_per_rev = 200;
 // number of revolutions to turn stepper
-int step_size = 1 * steps_per_rev;
+int step_size[] = {100, 20};
 // speed of stepper in revolutions per minute (rpm)
 int rev_speed = 10;
 // style of stepping can be SINGLE (1), DOUBLE (2), INTERLEAVE (3), or MICROSTEP (4)
-int step_style = SINGLE;
+int step_style = MICROSTEP;
 
 
 // Create the motor shield object with the default I2C address
@@ -36,15 +36,12 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_StepperMotor *myMotor1 = AFMS.getStepper(steps_per_rev, 1);
 Adafruit_StepperMotor *myMotor2 = AFMS.getStepper(steps_per_rev, 2);
 
-
 void setup() {
     // Connect to serial monitor
     Serial.begin(9600);
     Serial.println("Stepper test!");
-
     // create with the default frequency 1.6KHz 
     AFMS.begin(); 
-
     // set the motor speeds
     myMotor1->setSpeed(rev_speed);
     myMotor2->setSpeed(rev_speed);
@@ -53,16 +50,21 @@ void setup() {
 void loop() {
     /*
         This program will step motor1 forward by step_size (defined above),
-        then step motor2 forward, then step motor1 backwards, then step motor2
-        backwards, looping this process indefinitely.
+        then step motor1 backwards, then repeat the same for motor2,
+        looping this process indefinitely.
     */
 
     Serial.println("Stepping motor1 FORWARD");
-    myMotor1->step(step_size, FORWARD, step_style); 
-    Serial.println("Stepping motor2 FORWARD");
-    myMotor2->step(step_size, FORWARD, step_style); 
+    myMotor1->step(step_size[0], FORWARD, step_style);
+    delay(1000);
     Serial.println("Stepping motor1 BACKWARD");
-    myMotor1->step(step_size, BACKWARD, step_style);
+    myMotor1->step(step_size[0], BACKWARD, step_style);
+    delay(1000);
+
+    Serial.println("Stepping motor2 FORWARD");
+    myMotor2->step(step_size[1], FORWARD, step_style);
+    delay(1000);
     Serial.println("Stepping motor2 BACKWARD");
-    myMotor2->step(step_size, BACKWARD, step_style);
+    myMotor2->step(step_size[1], BACKWARD, step_style);
+    delay(1000);
 }

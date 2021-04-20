@@ -8,6 +8,7 @@ class SolarTracker
 protected:
     static const int numResistors = 4;      // number of (photo)resistors
     static const int numMotors = 2;         // number of motors
+    static const int stepsPerRev = 200;     // steps per revolution
 
     int resistorPins[numResistors];         // pins the resistors are attached to
     int motorPorts[numMotors];              // pins the motors are attached to
@@ -18,7 +19,9 @@ protected:
 
 
     Adafruit_MotorShield AFMS = Adafruit_MotorShield();     // Motor shield object with the default I2C address
-    Adafruit_StepperMotor *motor[numMotors];                // Stepper motors
+    // Adafruit_StepperMotor *motor[numMotors];                // Stepper motors
+    Adafruit_StepperMotor *motor[numMotors] = {AFMS.getStepper(stepsPerRev, 1), AFMS.getStepper(stepsPerRev, 2)};
+
     int motorDir[numMotors];                                // Movement of motors can be 0 (NONE), 1 (FORWARD), 2 (BACKWARD)
     int stepStyle[numMotors];                                          // Can be 1 (SINGLE), 2 (DOUBLE), 3 (INTERLEAVE), or 4 (MICROSTEP)
 
@@ -26,8 +29,8 @@ protected:
     int optThresh = 50;                     // threshold to consider when the SolarTracker is optimized
 
     // these could be moved to public but would required sophisticated usage, keeping them private for now for safety
-    void setup(int stepsPerRev);
-    void setup(int stepsPerRev, int *revSpeed);
+    void setup();
+    void setup(int *revSpeed);
 
 
 public:
@@ -43,12 +46,12 @@ public:
     int *readResistorDiff();
 
     // void setMotorPos(int *motorPos);
-    void moveMotors(int *motorDelta, int *motorDir);
+    void moveMotor(int axis, int stepSize, int stepDir, int stepStyle);
 
     void printAll() const;
     void printMotorDir() const;
 
-    void setup(int stepsPerRev, int *revSpeed, int *stepStyle);
+    void setup(int *revSpeed, int *stepStyle);
 
     bool isThereLight();
     bool isUnoptimized();

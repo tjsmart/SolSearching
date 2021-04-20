@@ -6,7 +6,7 @@ SolarTracker tracker(resistors, motors);
 void setup()
 {
     Serial.begin(9600);
-    tracker.setup(stepsPerRev, revSpeed, stepStyle);
+    tracker.setup(revSpeed, stepStyle);
 }
 
 void loop()
