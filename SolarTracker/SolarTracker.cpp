@@ -40,7 +40,7 @@ int *SolarTracker::getMotorPorts()
 }
 
 // analog read the resistorPins and store to resistorValues
-int SolarTracker::readResistorValues()
+int *SolarTracker::readResistorValues()
 {
     for (int i = 0; i < numResistors; i++)
     {
